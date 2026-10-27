@@ -1,0 +1,24 @@
+# ==============================================================================
+# FoodBridge RDS Infrastructure - Example Variables Template
+# Copy to terraform.tfvars and customize if needed
+# ==============================================================================
+
+aws_region              = "ap-south-1"
+aws_profile             = "foodbridge-personal"
+aws_account_id          = "879385476807"
+
+# Existing Networking References
+vpc_id                  = "vpc-03b6350686167f340"
+private_subnet_a_id     = "subnet-0f2d17b8fc243fea5"
+private_subnet_b_id     = "subnet-09d92be45585ace17"
+rds_security_group_id   = "sg-0afb47d635abdda5b"
+
+# RDS Database Configuration
+db_identifier           = "foodbridge-mysql-db"
+db_name                 = "foodbridge"
+db_username             = "foodbridge_admin"
+engine_version          = "8.0.46"
+instance_class          = "db.t4g.micro"
+allocated_storage       = 20
+storage_type            = "gp3"
+backup_retention_period = 1

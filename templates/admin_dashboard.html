@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - FoodBridge</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Custom Minimal CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+        <div class="container">
+            <a class="navbar-brand text-dark" href="{{ url_for('index') }}">
+                Food<span class="brand-accent">Bridge</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link fw-medium" href="{{ url_for('index') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active fw-medium" href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="text-muted small">Signed in as <strong>{{ session.get('user_name') }}</strong> (Admin)</span>
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="dashboard-wrapper">
+        <div class="container">
+            <!-- Flashed Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show mb-4" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="dashboard-card p-4 p-md-5 mb-4">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 border-bottom pb-4 mb-4">
+                    <div>
+                        <h2 class="fw-bold mb-1">Admin Dashboard</h2>
+                        <p class="text-muted mb-0">Platform overview, system statistics, and activity monitoring</p>
+                    </div>
+                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-2 fs-6">Role: System Administrator</span>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="mb-5">
+                    <h4 class="fw-bold mb-3">Platform Statistics</h4>
+                    
+                    <!-- Row 1: User & Total Metrics -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-6 col-md-3">
+                            <div class="card h-100 border text-center p-3">
+                                <span class="text-muted small fw-medium">Total Users</span>
+                                <h3 class="fw-bold text-dark mb-0 mt-1">{{ stats.total_users }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="card h-100 border text-center p-3">
+                                <span class="text-muted small fw-medium">Total Donors</span>
+                                <h3 class="fw-bold text-success mb-0 mt-1">{{ stats.total_donors }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="card h-100 border text-center p-3">
+                                <span class="text-muted small fw-medium">Total NGOs</span>
+                                <h3 class="fw-bold text-primary mb-0 mt-1">{{ stats.total_ngos }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="card h-100 border text-center p-3">
+                                <span class="text-muted small fw-medium">Total Donations</span>
+                                <h3 class="fw-bold text-secondary mb-0 mt-1">{{ stats.total_donations }}</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Donation Lifecycle Breakdown -->
+                    <div class="row g-3">
+                        <div class="col-6 col-md-3">
+                            <div class="card h-100 border border-success-subtle bg-success-subtle bg-opacity-10 text-center p-3">
+                                <span class="text-muted small fw-medium">Available Donations</span>
+                                <h3 class="fw-bold text-success mb-0 mt-1">{{ stats.available_donations }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="card h-100 border border-warning-subtle bg-warning-subtle bg-opacity-10 text-center p-3">
+                                <span class="text-muted small fw-medium">Reserved Donations</span>
+                                <h3 class="fw-bold text-warning text-dark mb-0 mt-1">{{ stats.reserved_donations }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="card h-100 border border-primary-subtle bg-primary-subtle bg-opacity-10 text-center p-3">
+                                <span class="text-muted small fw-medium">Completed Donations</span>
+                                <h3 class="fw-bold text-primary mb-0 mt-1">{{ stats.completed_donations }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <div class="card h-100 border border-danger-subtle bg-danger-subtle bg-opacity-10 text-center p-3">
+                                <span class="text-muted small fw-medium">Expired Donations</span>
+                                <h3 class="fw-bold text-danger mb-0 mt-1">{{ stats.expired_donations }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Donations Table -->
+                <div class="mb-5">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                        <h4 class="fw-bold mb-0">Recent Donations</h4>
+                        <span class="text-muted small">{{ recent_donations|length }} recent listing(s)</span>
+                    </div>
+
+                    {% if recent_donations %}
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle border">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col" style="min-width: 180px;">Food Name</th>
+                                        <th scope="col">Donor</th>
+                                        <th scope="col">Category</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col" style="min-width: 170px;">Pickup Location</th>
+                                        <th scope="col" style="min-width: 160px;">Available Until</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for donation in recent_donations %}
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    {% if donation.image_filename %}
+                                                        <img src="{{ get_image_url(donation.image_filename) }}" alt="{{ donation.food_name }}" class="rounded" style="width: 44px; height: 44px; object-fit: cover;">
+                                                    {% endif %}
+                                                    <span class="fw-semibold">{{ donation.food_name }}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="small fw-medium">{{ donation.donor.name }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-light text-dark border">{{ donation.category }}</span>
+                                            </td>
+                                            <td>
+                                                <strong>{{ donation.quantity }}</strong>
+                                            </td>
+                                            <td>
+                                                <span class="text-secondary small">{{ donation.pickup_location }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="small">{{ donation.available_until.strftime('%b %d, %Y %I:%M %p') }}</span>
+                                            </td>
+                                            <td>
+                                                {% if donation.status == 'AVAILABLE' %}
+                                                    <span class="badge bg-success">AVAILABLE</span>
+                                                {% elif donation.status == 'RESERVED' %}
+                                                    <span class="badge bg-warning text-dark">RESERVED</span>
+                                                {% elif donation.status == 'COMPLETED' %}
+                                                    <span class="badge bg-primary">COMPLETED</span>
+                                                {% elif donation.status == 'EXPIRED' %}
+                                                    <span class="badge bg-danger">EXPIRED</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">{{ donation.status }}</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-light border text-center py-4 my-2">
+                            <p class="text-muted mb-0">No donations have been created yet.</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Recent Reservations Table -->
+                <div>
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                        <h4 class="fw-bold mb-0">Recent Reservations</h4>
+                        <span class="text-muted small">{{ recent_reservations|length }} recent reservation(s)</span>
+                    </div>
+
+                    {% if recent_reservations %}
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle border">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col" style="min-width: 180px;">Food</th>
+                                        <th scope="col">NGO</th>
+                                        <th scope="col" style="min-width: 160px;">Reserved At</th>
+                                        <th scope="col">Pickup Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for res in recent_reservations %}
+                                        <tr>
+                                            <td>
+                                                <span class="fw-semibold">{{ res.donation.food_name }}</span>
+                                                <small class="text-muted d-block">Donor: {{ res.donation.donor.name }}</small>
+                                            </td>
+                                            <td>
+                                                <span class="fw-medium">{{ res.ngo.name }}</span>
+                                                <small class="text-muted d-block">{{ res.ngo.email }}</small>
+                                            </td>
+                                            <td>
+                                                <span class="small text-muted">{{ res.reserved_at.strftime('%b %d, %Y %I:%M %p') }}</span>
+                                            </td>
+                                            <td>
+                                                {% if res.pickup_status == 'RESERVED' %}
+                                                    <span class="badge bg-warning text-dark">RESERVED</span>
+                                                {% elif res.pickup_status == 'COMPLETED' %}
+                                                    <span class="badge bg-primary">COMPLETED</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">{{ res.pickup_status }}</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-light border text-center py-4 my-2">
+                            <p class="text-muted mb-0">No reservations have been made yet.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p class="mb-1">&copy; 2026 FoodBridge. All rights reserved.</p>
+            <p class="mb-0 text-muted small">Connecting surplus food donors with NGOs and community volunteers.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

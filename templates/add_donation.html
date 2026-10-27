@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Food Donation - FoodBridge</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Custom Minimal CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
+        <div class="container">
+            <a class="navbar-brand text-dark" href="{{ url_for('index') }}">
+                Food<span class="brand-accent">Bridge</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link fw-medium" href="{{ url_for('index') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-medium" href="{{ url_for('donor_dashboard') }}">Donor Dashboard</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="text-muted small">Signed in as <strong>{{ session.get('user_name') }}</strong></span>
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="dashboard-wrapper">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8">
+                    <!-- Flashed Messages -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show mb-4" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <div class="dashboard-card p-4 p-md-5">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 border-bottom pb-3 mb-4">
+                            <div>
+                                <h2 class="fw-bold mb-1">Add Food Donation</h2>
+                                <p class="text-muted mb-0">List surplus food to be collected by verified NGOs</p>
+                            </div>
+                            <a href="{{ url_for('donor_dashboard') }}" class="btn btn-outline-secondary btn-sm">Back to Dashboard</a>
+                        </div>
+
+                        <form method="POST" action="{{ url_for('add_donation') }}" enctype="multipart/form-data">
+                            <!-- Food Name -->
+                            <div class="mb-3">
+                                <label for="food_name" class="form-label fw-medium">Food Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="food_name" name="food_name" value="{{ food_name or '' }}" placeholder="e.g. Fresh Veggie Meals, Whole Wheat Bread" required autofocus>
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <!-- Category -->
+                                <div class="col-md-6">
+                                    <label for="category" class="form-label fw-medium">Category <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="category" name="category" required>
+                                        <option value="" disabled {% if not category %}selected{% endif %}>Select category</option>
+                                        {% for cat in categories %}
+                                            <option value="{{ cat }}" {% if category == cat %}selected{% endif %}>{{ cat }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <!-- Quantity -->
+                                <div class="col-md-6">
+                                    <label for="quantity" class="form-label fw-medium">Quantity (Units / Meals) <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="quantity" name="quantity" min="1" step="1" value="{{ quantity or '' }}" placeholder="e.g. 10" required>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <!-- Pickup Location -->
+                                <div class="col-md-6">
+                                    <label for="pickup_location" class="form-label fw-medium">Pickup Location <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="pickup_location" name="pickup_location" value="{{ pickup_location or '' }}" placeholder="e.g. 123 Main Street, Kitchen Backdoor" required>
+                                </div>
+
+                                <!-- Available Until -->
+                                <div class="col-md-6">
+                                    <label for="available_until" class="form-label fw-medium">Available Until <span class="text-danger">*</span></label>
+                                    <input type="datetime-local" class="form-control" id="available_until" name="available_until" value="{{ available_until or '' }}" required>
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="mb-3">
+                                <label for="description" class="form-label fw-medium">Description (Optional)</label>
+                                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Provide extra details such as dietary info, storage instructions, or packaging...">{{ description or '' }}</textarea>
+                            </div>
+
+                            <!-- Food Image -->
+                            <div class="mb-4">
+                                <label for="food_image" class="form-label fw-medium">Food Image (Optional)</label>
+                                <input type="file" class="form-control" id="food_image" name="food_image" accept=".jpg,.jpeg,.png">
+                                <div class="form-text">Accepted file types: JPG, JPEG, PNG (maximum 16 MB)</div>
+                            </div>
+
+                            <!-- Form Actions -->
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-success px-4 py-2 fw-semibold">Submit Donation</button>
+                                <a href="{{ url_for('donor_dashboard') }}" class="btn btn-outline-secondary px-4 py-2">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <p class="mb-1">&copy; 2026 FoodBridge. All rights reserved.</p>
+            <p class="mb-0 text-muted small">Connecting surplus food donors with NGOs and community volunteers.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

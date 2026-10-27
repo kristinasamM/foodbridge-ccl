@@ -1,0 +1,29 @@
+# ==============================================================================
+# FoodBridge RDS Terraform - Git Ignore
+# Dedicated for AWS Account: 879385476807
+# ==============================================================================
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Sensitive tfvars containing local overrides
+*.tfvars
+!terraform.tfvars.example
+
+# Ignore override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI configuration files
+.terraformrc
+terraform.rc

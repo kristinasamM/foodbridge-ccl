@@ -1,0 +1,41 @@
+# ==============================================================================
+# FoodBridge EC2 Infrastructure - Variable Configuration Example
+# Copy this file to terraform.tfvars and fill in your values
+# ==============================================================================
+
+# Target AWS Region
+aws_region = "ap-south-1"
+
+# Named AWS CLI Profile (leave empty to use default profile or environment variables)
+aws_profile = ""
+
+# Guard: target AWS account ID
+aws_account_id = "879385476807"
+
+# Manually created VPC ID in your AWS account
+vpc_id = "vpc-03b6350686167f340"
+
+# (Optional) Explicit Public Subnet ID (e.g., "subnet-0123456789abcdef0")
+# If left empty (""), Terraform will auto-discover it using VPC ID and CIDR 10.0.1.0/24
+public_subnet_id = ""
+
+# (Optional) Explicit EC2 Security Group ID (e.g., "sg-0123456789abcdef0")
+# If left empty (""), Terraform will auto-discover it using VPC ID and name "FoodBridge-EC2-SG"
+ec2_security_group_id = ""
+
+# Name of your existing EC2 Key Pair created in ap-south-1 (required for SSH/SCP deployment)
+ssh_key_name = ""
+
+# Instance Type (t3.micro is Free Tier eligible in eligible accounts)
+instance_type = "t3.micro"
+
+# Root volume size in GB (gp3, encrypted)
+root_volume_size = 20
+
+# Resource Tags
+default_tags = {
+  Project     = "FoodBridge"
+  ManagedBy   = "Terraform"
+  Environment = "dev"
+  Owner       = "Kristina"
+}

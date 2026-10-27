@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.bak
+*.bak_*
+temp_test.db
+
+# Flask & SQLite / Local instances
+instance/
+*.db
+*.sqlite
+*.sqlite3
+.env
+
+# Uploads (ignore uploaded media but keep directory)
+static/uploads/*
+!static/uploads/.gitkeep
+
+# Terraform & AWS state / sensitive files
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+tfplan
+*.plan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

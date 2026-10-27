@@ -1,0 +1,142 @@
+/* FoodBridge - Minimal Custom Styling */
+
+:root {
+  --primary-color: #198754;
+  --primary-hover: #157347;
+  --secondary-color: #0d6efd;
+  --text-dark: #212529;
+  --text-muted: #6c757d;
+  --bg-light: #f8f9fa;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* Navbar */
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.brand-accent {
+  color: var(--primary-color);
+}
+
+/* Hero Section */
+.hero-section {
+  padding: 5rem 0 4rem;
+  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+}
+
+.hero-heading {
+  font-size: 2.75rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.2;
+}
+
+.hero-description {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.hero-buttons .btn {
+  padding: 0.75rem 1.75rem;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+/* How It Works Section */
+.how-it-works-section {
+  padding: 4.5rem 0;
+  background-color: var(--bg-light);
+}
+
+.step-card {
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  background-color: #ffffff;
+  padding: 2rem 1.5rem;
+  height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.step-number {
+  width: 48px;
+  height: 48px;
+  background-color: #d1e7dd;
+  color: var(--primary-color);
+  font-weight: 700;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-bottom: 1.25rem;
+}
+
+.step-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.step-desc {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 0;
+}
+
+/* Footer */
+footer {
+  background-color: #ffffff;
+  border-top: 1px solid #e9ecef;
+  padding: 1.75rem 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* Auth Cards */
+.auth-wrapper {
+  padding: 3.5rem 0;
+  background-color: var(--bg-light);
+  min-height: calc(100vh - 160px);
+}
+
+.auth-card {
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+/* Dashboard Container */
+.dashboard-wrapper {
+  padding: 3rem 0;
+  background-color: var(--bg-light);
+  min-height: calc(100vh - 160px);
+}
+
+.dashboard-card {
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
